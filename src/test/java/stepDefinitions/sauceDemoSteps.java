@@ -1,6 +1,13 @@
 package stepDefinitions;
 
 import io.cucumber.java.en.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 import static Reports.seleniumTest.*;
 import static org.junit.Assert.assertEquals;
@@ -22,7 +29,30 @@ public class sauceDemoSteps {
                 Thread.sleep(3000);
                 extent_reports("login.jpg","User Credentials");
                 click_login_btn();
-                Thread.sleep(3000);
+        Thread.sleep(3000);
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+            // Modify this locator to match your popup
+            WebElement changePasswordPopup = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("change-password-popup")));
+
+            // Option 1: Click skip/dismiss (if available)
+            WebElement skipButton = changePasswordPopup.findElement(By.xpath("//button[text()='Skip']"));
+            skipButton.click();
+
+            // Option 2: Or handle password change
+            // WebElement newPasswordField = changePasswordPopup.findElement(By.id("new-password"));
+            // WebElement confirmButton = changePasswordPopup.findElement(By.id("confirm-change"));
+            // newPasswordField.sendKeys("NewPassword123");
+            // confirmButton.click();
+
+            System.out.println("Change password popup handled.");
+        } catch (TimeoutException e) {
+            // Popup not present — continue as normal
+            System.out.println("No change password popup detected.");
+        }
+
+        Thread.sleep(3000);
     }
 
     @When("User adds items to cart and checkout")
